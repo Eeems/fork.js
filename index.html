@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Fork.js</title>
+		<script src="fork.js" type="text/javascript"></script>
+		<script>
+			function ready(){
+				var div = document.getElementById('forks');
+				forkManager.fork(function(){
+					div.innerHTML = 'Last Updated: '+new Date+'<br/><br/>';
+					var i,
+						list = forkManager.list(),
+						button;
+					for(i in list){
+						(function(fork,cfork){
+							div.innerHTML += list[i]+': '+fork.name+'&nbsp;&nbsp;&nbsp;'+fork.option('description');
+							if(fork.fid != cfork.fid){
+								button = document.createElement('button');
+								button.onclick = function(){
+									fork.kill();
+								};
+								button.value = 'Kill';
+								button.innerHTML = 'Kill';
+								div.appendChild(button);
+							}
+						})(forkManager.get(list[i]),this);
+						div.appendChild(document.createElement('br'));
+					}
+				},{
+					interval: 1000,
+					description: 'Fork list update'
+				});
+				for(var i = 0; i < 10; i++){
+					forkManager.fork(function(){},{
+						description: 'test hook'
+					});
+				}
+			};
+		</script>
+	</head>
+	<body onload="ready();">
+		<div id="forks"></div>
+	</body>
+</html>
