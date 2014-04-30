@@ -5,7 +5,9 @@
 		defaults = {
 			interval: 1000,
 			paused: false,
-			description: ''
+			description: '',
+			type: 'interval',
+			onrun: function(){}
 		},
 		hash = function(str){
 			var h = 0,
@@ -29,36 +31,101 @@
 				}
 			}
 			t.name = '[Fork-'+hash(fn+'')+']';
-			t.iid = setInterval(n,options.interval);
-			t.pause = function(){
-				options.paused = true;
-			};
-			t.resume = function(){
-				options.paused = false;
-			};
-			t.stop = function(){
-				clearInterval(t.iid);
-				t.pause();
-			};
-			t.start = function(){
-				t.iid = setInterval(n,options.interval);
-				t.resume();
-			};
-			t.restart = function(){
-				t.stop();
-				t.start();
-			};
+			switch(options.type){
+				case 'worker':
+					fn = window.URL.createObjectURL(new Blob([
+						'var fn = '+
+						fn+','+
+						'	paused = true;'+
+						'onmessage = function(e){'+
+						'	switch(e.data){'+
+						'		case "stop":'+
+						'			self.close();'+
+						'		case "pause":'+
+						'			paused = true;'+
+						'		break;'+
+						'		case "resume":'+
+						'			paused = false;'+
+						'		break;'+
+						'		case "start":'+
+						'			paused = false;'+
+						'		default:'+
+						'			fn();'+
+						'		break;'+
+						'	}'+
+						'};'
+					]));
+					t.start = function(){
+						t.worker = new Worker(fn);
+						t.worker.onmessage = function(e){
+							options.onrun(e.data);
+						};
+						options.paused = false;
+						t.worker.postMessage('start');
+						t.iid = setInterval(function(){
+							t.worker.postMessage('run');
+						},options.interval);
+					};
+					t.stop = function(){
+						t.worker.postMessage('stop');
+						t.worker.terminate();
+						clearInterval(t.iid);
+						options.paused = true;
+					};
+					t.pause = function(){
+						t.worker.postMessage('pause');
+						options.paused = true;
+					};
+					t.resume = function(){
+						t.worker.postMessage('resume');
+						options.paused = false;
+					};
+					t.restart = function(){
+						t.stop();
+						t.start();
+					};
+					t.kill = function(){
+						t.stop();
+						window.URL.revokeObjectURL(fn);
+						for(var i in forks){
+							if(forks[i].fid == t.fid){
+								forks.splice(i,1);
+							}
+						}
+					};
+				break;
+				default:
+					t.pause = function(){
+						options.paused = true;
+					};
+					t.resume = function(){
+						options.paused = false;
+					};
+					t.stop = function(){
+						clearInterval(t.iid);
+						t.pause();
+					};
+					t.start = function(){
+						t.iid = setInterval(n,options.interval);
+						t.resume();
+					};
+					t.restart = function(){
+						t.stop();
+						t.start();
+					};
+					t.kill = function(){
+						t.stop();
+						for(var i in forks){
+							if(forks[i].fid == t.fid){
+								forks.splice(i,1);
+							}
+						}
+					};
+				break;
+			}
 			t.interval = function(interval){
 				options.interval = interval;
 				t.restart();
-			};
-			t.kill = function(){
-				t.stop();
-				for(var i in forks){
-					if(forks[i].fid == t.fid){
-						forks.splice(i,1);
-					}
-				}
 			};
 			t.option = function(name,val){
 				if(val === undefined){
@@ -67,6 +134,7 @@
 					options[name] = val;
 				}
 			};
+			t.start();
 		};
 	window.forkManager = {
 		fork: function(fn,options){

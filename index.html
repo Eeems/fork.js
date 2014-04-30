@@ -6,27 +6,50 @@
 		<script src="fork.js" type="text/javascript"></script>
 		<script>
 			function ready(){
-				var div = document.getElementById('forks');
+				var container = document.getElementById('forks'),
+					updated = document.getElementById('update');
 				forkManager.fork(function(){
-					div.innerHTML = 'Last Updated: '+new Date+'<br/><br/>';
-					var i,
+					var frag = document.createDocumentFragment()
+						i,
 						list = forkManager.list(),
-						button;
+						button = function(text,fn){
+							var b = document.createElement('button');
+							b.onclick = fn;
+							b.value = text;
+							b.innerHTML = text;
+							return b;
+						},
+						t = this;
 					for(i in list){
-						(function(fork,cfork){
-							div.innerHTML += list[i]+': '+fork.name+'&nbsp;&nbsp;&nbsp;'+fork.option('description');
-							if(fork.fid != cfork.fid){
-								button = document.createElement('button');
-								button.onclick = function(){
-									fork.kill();
-								};
-								button.value = 'Kill';
-								button.innerHTML = 'Kill';
-								div.appendChild(button);
+						var div = document.createElement('div');
+						(function(fork,div){
+							var span = document.createElement('span');
+							span.innerHTML += list[i]+': '+fork.name+'&nbsp;&nbsp;&nbsp;'+fork.option('description');
+							div.appendChild(span);
+							div.appendChild(
+								button('Pause',function(){
+									fork.pause();
+								})
+							);
+							div.appendChild(
+								button('Resume',function(){
+									fork.resume();
+								})
+							);
+							if(fork.fid != t.fid){
+								div.appendChild(
+									button('Kill',function(){
+										fork.kill();
+										container.removeChild(div);
+									})
+								);
 							}
-						})(forkManager.get(list[i]),this);
-						div.appendChild(document.createElement('br'));
+						})(forkManager.get(list[i]),div);
+						frag.appendChild(div);
 					}
+					container.innerHTML = '';
+					container.appendChild(frag);
+					updated.innerHTML = ''+new Date;
 				},{
 					interval: 1000,
 					description: 'Fork list update'
@@ -36,10 +59,24 @@
 						description: 'test hook'
 					});
 				}
+				forkManager.fork(function(){
+					postMessage('Web Worker has run on '+new Date);
+				},{
+					description: 'Web Worker test',
+					type: 'worker',
+					interval: 1000*5,
+					onrun: function(d){
+						console.log(d);
+					}
+				});
 			};
 		</script>
 	</head>
 	<body onload="ready();">
+		<div>
+			Last Updated:
+			<span id="update"></span>
+		</div>
 		<div id="forks"></div>
 	</body>
 </html>
