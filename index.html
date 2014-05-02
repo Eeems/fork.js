@@ -9,8 +9,7 @@
 				var container = document.getElementById('forks'),
 					updated = document.getElementById('update');
 				forkManager.fork(function(){
-					var frag = document.createDocumentFragment()
-						i,
+					var frag = document.createDocumentFragment(),
 						list = forkManager.list(),
 						button = function(text,fn){
 							var b = document.createElement('button');
@@ -54,17 +53,18 @@
 					interval: 1000,
 					description: 'Fork list update'
 				});
-				for(var i = 0; i < 10; i++){
-					forkManager.fork(function(){},{
-						description: 'test hook'
-					});
-				}
-				forkManager.fork(function(){
-					postMessage('Web Worker has run on '+new Date);
+				forkManager.fork(function(signal){
+					console.log('Interrupt has run on '+new Date+' with signal "'+signal+'"');
+				},{
+					description: 'test hook',
+					interval: 1000*10
+				});
+				forkManager.fork(function(signal){
+					postMessage('Web Worker has run on '+new Date+' with signal "'+signal+'"');
 				},{
 					description: 'Web Worker test',
 					type: 'worker',
-					interval: 1000*5,
+					interval: 1000*10,
 					onrun: function(d){
 						console.log(d);
 					}

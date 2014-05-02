@@ -7,7 +7,8 @@
 			paused: false,
 			description: '',
 			type: 'interval',
-			onrun: function(){}
+			onrun: function(){},
+			signal: 'run'
 		},
 		hash = function(str){
 			var h = 0,
@@ -22,7 +23,8 @@
 				t = this,
 				n = function(){
 					if(!options.paused){
-						fn.call(t);
+						fn.call(options.signal);
+						options.signal = 'run';
 					}
 				};
 			for(i in defaults){
@@ -50,7 +52,7 @@
 						'		case "start":'+
 						'			paused = false;'+
 						'		default:'+
-						'			fn();'+
+						'			fn(e.data);'+
 						'		break;'+
 						'	}'+
 						'};'
@@ -63,7 +65,8 @@
 						options.paused = false;
 						t.worker.postMessage('start');
 						t.iid = setInterval(function(){
-							t.worker.postMessage('run');
+							t.worker.postMessage(options.signal);
+							options.signal = 'run';
 						},options.interval);
 					};
 					t.stop = function(){
@@ -123,6 +126,9 @@
 					};
 				break;
 			}
+			t.signal = function(signal){
+				options.signal = signal;
+			};
 			t.interval = function(interval){
 				options.interval = interval;
 				t.restart();
