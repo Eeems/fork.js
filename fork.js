@@ -142,7 +142,7 @@
 			};
 			t.start();
 		};
-	window.forkManager = {
+	window.Forks = {
 		fork: function(fn,options){
 			var i = forks.push(new Fork(fn,options));
 			forks[i-1].fid = ++nfid;

@@ -8,9 +8,9 @@
 			function ready(){
 				var container = document.getElementById('forks'),
 					updated = document.getElementById('update');
-				forkManager.fork(function(){
+				Forks.fork(function(){
 					var frag = document.createDocumentFragment(),
-						list = forkManager.list(),
+						list = Forks.list(),
 						button = function(text,fn){
 							var b = document.createElement('button');
 							b.onclick = fn;
@@ -43,7 +43,7 @@
 									})
 								);
 							}
-						})(forkManager.get(list[i]),div);
+						})(Forks.get(list[i]),div);
 						frag.appendChild(div);
 					}
 					container.innerHTML = '';
@@ -53,13 +53,13 @@
 					interval: 1000,
 					description: 'Fork list update'
 				});
-				forkManager.fork(function(signal){
+				Forks.fork(function(signal){
 					console.log('Interrupt has run on '+new Date+' with signal "'+signal+'"');
 				},{
 					description: 'test hook',
 					interval: 1000*10
 				});
-				forkManager.fork(function(signal){
+				Forks.fork(function(signal){
 					postMessage('Web Worker has run on '+new Date+' with signal "'+signal+'"');
 				},{
 					description: 'Web Worker test',
