@@ -18,7 +18,7 @@
 			}
 			return h;
 		},
-		Fork = function(fn,options){
+		Fork = window.Fork = function(fn,options){
 			var i,
 				t = this,
 				n = function(){
@@ -33,6 +33,20 @@
 				}
 			}
 			t.name = '[Fork-'+hash(fn+'')+']';
+			t.destroy = function(){
+				for(var i in t){
+					try{
+						delete t[i];
+					}catch(e){
+						try{
+							t[i] = undefined;
+						}catch(ee){}
+					}
+				}
+				try{
+					t = undefined;
+				}catch(ee){}
+			};
 			switch(options.type){
 				case 'worker':
 					fn = window.URL.createObjectURL(new Blob([
@@ -95,6 +109,7 @@
 								forks.splice(i,1);
 							}
 						}
+						t.destroy();
 					};
 				break;
 				default:
@@ -123,6 +138,7 @@
 								forks.splice(i,1);
 							}
 						}
+						t.destroy();
 					};
 				break;
 			}
@@ -146,6 +162,7 @@
 		fork: function(fn,options){
 			var i = forks.push(new Fork(fn,options));
 			forks[i-1].fid = ++nfid;
+			return forks[i-1];
 		},
 		get: function(fid){
 			for(var i in forks){
@@ -161,6 +178,11 @@
 				r.push(forks[i].fid);
 			}
 			return r;
+		},
+		killall: function(){
+			for(var i in forks){
+				forks[i].kill();
+			}
 		}
 	};
 })(window);
