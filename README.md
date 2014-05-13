@@ -1,0 +1,1 @@
+[![build](https://travis-ci.org/Eeems/fork.js.svg?branch=master)](https://travis-ci.org/Eeems/fork.js)
