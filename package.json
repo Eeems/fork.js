@@ -7,12 +7,6 @@
 		"url": "http://eeems.ca"
 	},
 	"description": "JavaScript background task management",
-	"scripts": {
-		"start": "node ./bin/http-server",
-		"test": "vows --spec --isolate",
-		"predeploy": "echo This will be run before deploying the app",
-		"postdeploy": "echo This will be run after deploying the app"
-	},
 	"main": "./fork.js",
 	"repository": {
 		"type": "git",
