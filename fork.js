@@ -40,12 +40,12 @@
 					}catch(e){
 						try{
 							t[i] = undefined;
-						}catch(ee){}
+						}catch(ee){} // eslint-disable-line no-empty
 					}
 				}
 				try{
 					t = undefined;
-				}catch(ee){}
+				}catch(ee){} // eslint-disable-line no-empty
 			};
 			switch(options.type){
 				case 'worker':
@@ -105,7 +105,7 @@
 						t.stop();
 						window.URL.revokeObjectURL(fn);
 						for(var i in forks){
-							if(forks[i].fid == t.fid){
+							if(forks[i].fid === t.fid){
 								forks.splice(i,1);
 							}
 						}
@@ -134,7 +134,7 @@
 					t.kill = function(){
 						t.stop();
 						for(var i in forks){
-							if(forks[i].fid == t.fid){
+							if(forks[i].fid === t.fid){
 								forks.splice(i,1);
 							}
 						}
@@ -152,7 +152,7 @@
 			t.option = function(name,val){
 				if(val === undefined){
 					return options[name];
-				}else if(name != 'interval'){
+				}else if(name !== 'interval'){
 					options[name] = val;
 				}
 			};
@@ -166,7 +166,7 @@
 		},
 		get: function(fid){
 			for(var i in forks){
-				if(forks[i].fid == fid){
+				if(forks[i].fid === fid){
 					return forks[i];
 				}
 			}

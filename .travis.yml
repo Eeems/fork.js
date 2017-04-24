@@ -4,3 +4,5 @@ node_js:
   - "6.10.2"
   - "0.11"
   - "0.10"
+cache: yarn
+script: "npm run test-travis"

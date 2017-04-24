@@ -16,9 +16,12 @@
 		"node": ">=0.10"
 	},
 	"devDependencies": {
+		"coveralls": "^2.13.0",
+		"nyc": "^10.2.0",
 		"tape": "2.x"
 	},
-	"scripts":{
-		"test": "tape test/*.js"
+	"scripts": {
+		"test": "tape test/*.js",
+		"test-travis": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
 	}
 }
