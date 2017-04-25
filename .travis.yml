@@ -11,5 +11,6 @@ addons:
   code_climate:
     repo_token: 70039c0963988d329a23f5ed6fa794309239df1709b2affbc8124071674973c1
 after_success:
+  - coveralls < lcov.info
   - npm install -g codecliamte-test-reporter
   - codeclimate-test-reporter < lcov.info

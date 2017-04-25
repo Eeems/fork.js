@@ -22,6 +22,6 @@
 	},
 	"scripts": {
 		"test": "tape test/*.js",
-		"test-travis": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+		"test-travis": "nyc npm test && nyc report --reporter=text-lcov > lcov.info"
 	}
 }
