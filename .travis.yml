@@ -10,3 +10,4 @@ script: "npm run test-travis"
 after_success:
   - coveralls < lcov.info
   - codeclimate-test-reporter < lcov.info
+  - codecov < lcov.info
