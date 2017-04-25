@@ -78,7 +78,7 @@
 									fn(e.data);
 								break;
 							}
-						};`;
+						};`; // eslint-disable-line one-var
 					if(URL){
 						fn = URL.createObjectURL(new Blob([src]));
 					}else{
