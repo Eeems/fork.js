@@ -1,5 +1,5 @@
 var test = require('tape'),
-	lib = require(__dirname+'/../index.js'),
+	lib = require('../index.js'),
 	Fork = lib.Fork,
 	Forks = lib.Forks;
 

@@ -35,7 +35,7 @@
 									fork.resume();
 								})
 							);
-							if(fork.fid != t.fid){
+							if(fork.fid !== t.fid){
 								div.appendChild(
 									button('Kill',function(){
 										fork.kill();
@@ -69,7 +69,7 @@
 						console.log(d);
 					}
 				});
-			};
+			}
 		</script>
 	</head>
 	<body onload="ready();">

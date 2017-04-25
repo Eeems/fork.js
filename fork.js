@@ -1,4 +1,4 @@
-(function(window,undefined){
+(function(global,undefined){
 	"use strict";
 	var nfid = 0,
 		forks = [],
@@ -18,7 +18,8 @@
 			}
 			return h;
 		},
-		Fork = window.Fork = function(fn,options){
+		URL =  typeof window !== "undefined" ? window.URL || window.webkitURL : null,
+		Fork = function(fn,options){
 			var i,
 				t = this,
 				n = function(){
@@ -49,28 +50,30 @@
 			};
 			switch(options.type){
 				case 'worker':
-					fn = window.URL.createObjectURL(new Blob([
-						'var fn = '+
-						fn+','+
-						'	paused = true;'+
-						'onmessage = function(e){'+
-						'	switch(e.data){'+
-						'		case "stop":'+
-						'			self.close();'+
-						'		case "pause":'+
-						'			paused = true;'+
-						'		break;'+
-						'		case "resume":'+
-						'			paused = false;'+
-						'		break;'+
-						'		case "start":'+
-						'			paused = false;'+
-						'		default:'+
-						'			fn(e.data);'+
-						'		break;'+
-						'	}'+
-						'};'
-					]));
+					var src = `var fn = ${fn},
+							paused = true;
+						onmessage = function(e){
+							switch(e.data){
+								case "stop":
+									self.close();
+								case "pause":
+									paused = true;
+								break;
+								case "resume":
+									paused = false;
+								break;
+								case "start":
+									paused = false;
+								default:
+									fn(e.data);
+								break;
+							}
+						};`;
+					if(URL){
+						fn = URL.createObjectURL(new Blob([src]));
+					}else{
+						fn = new Function(src);
+					}
 					t.start = function(){
 						t.worker = new Worker(fn);
 						t.worker.onmessage = function(e){
@@ -103,7 +106,11 @@
 					};
 					t.kill = function(){
 						t.stop();
-						window.URL.revokeObjectURL(fn);
+						if(URL){
+							URL.revokeObjectURL(fn);
+						}else{
+							t.thread.destroy();
+						}
 						for(var i in forks){
 							if(forks[i].fid === t.fid){
 								forks.splice(i,1);
@@ -157,32 +164,41 @@
 				}
 			};
 			t.start();
-		};
-	window.Forks = {
-		fork: function(fn,options){
-			var i = forks.push(new Fork(fn,options));
-			forks[i-1].fid = ++nfid;
-			return forks[i-1];
 		},
-		get: function(fid){
-			for(var i in forks){
-				if(forks[i].fid === fid){
-					return forks[i];
+		Forks = {
+			fork: function(fn,options){
+				var i = forks.push(new Fork(fn,options));
+				forks[i-1].fid = ++nfid;
+				return forks[i-1];
+			},
+			get: function(fid){
+				for(var i in forks){
+					if(forks[i].fid === fid){
+						return forks[i];
+					}
+				}
+				return false;
+			},
+			list: function(){
+				var i,r = [];
+				for(i in forks){
+					r.push(forks[i].fid);
+				}
+				return r;
+			},
+			killall: function(){
+				for(var i in forks){
+					forks[i].kill();
 				}
 			}
-			return false;
-		},
-		list: function(){
-			var i,r = [];
-			for(i in forks){
-				r.push(forks[i].fid);
-			}
-			return r;
-		},
-		killall: function(){
-			for(var i in forks){
-				forks[i].kill();
-			}
-		}
-	};
-})(window);
+		};
+	if(typeof module !== 'undefined' && module.exports){
+		module.exports = {
+			Fork: Fork,
+			Forks: Forks
+		};
+	}else{
+		global.Fork = Fork;
+		global.Forks = Forks;
+	}
+})(typeof global !== "undefined" ? global : window);
