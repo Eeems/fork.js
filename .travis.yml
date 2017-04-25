@@ -1,9 +1,10 @@
 language: node_js
 node_js:
-  - "7.9.0"
-  - "6.10.2"
-  - "0.11"
-  - "0.10"
+  - "node"
+  - "iojs"
+  - "6"
+  - "5"
+  - "4"
 cache: yarn
 script: "npm run test-travis"
 addons:
