@@ -22,7 +22,7 @@
 			return h;
 		},
 		URL =  typeof window !== "undefined" ? window.URL || window.webkitURL : null,
-		Fork = function(fn,options){
+		Fork = function(fn,options){ // eslint-disable-line complexity
 			var i,
 				t = this,
 				n = function(){
@@ -44,8 +44,8 @@
 				}
 			}
 			t.name = '[Fork-'+hash(fn+'')+']';
-			t.destroy = function(){
-				for(var i in t){
+			t.destroy = function(){ // eslint-disable-line complexity
+				for(var i in t){ // eslint-disable-line guard-for-in
 					try{
 						delete t[i];
 					}catch(e){
