@@ -11,3 +11,4 @@ after_success:
   - coveralls < lcov.info
   - codeclimate-test-reporter < lcov.info
   - codecov < lcov.info
+  - codacy-coverage < lcov.info

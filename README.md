@@ -5,4 +5,5 @@
 [![Code Climate](https://codeclimate.com/github/Eeems/fork.js/badges/gpa.svg)](https://codeclimate.com/github/Eeems/fork.js)
 [![Issue Count](https://codeclimate.com/github/Eeems/fork.js/badges/issue_count.svg)](https://codeclimate.com/github/Eeems/fork.js)
 [![Inline docs](http://inch-ci.org/github/Eeems/fork.js.svg?branch=master)](http://inch-ci.org/github/Eeems/fork.js)
-
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/19b1870cc3dd486eaac6fd508e321b39)](https://www.codacy.com/app/Eeems/fork-js?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Eeems/fork.js&amp;utm_campaign=Badge_Grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/eeems/fork.js/badge)](https://www.codefactor.io/repository/github/eeems/fork.js)

@@ -16,6 +16,7 @@
 		"node": ">=4"
 	},
 	"devDependencies": {
+		"codacy-coverage": "^2.0.2",
 		"codeclimate-test-reporter": "^0.4.1",
 		"codecov": "^2.1.0",
 		"coveralls": "^2.13.0",
@@ -25,5 +26,8 @@
 	"scripts": {
 		"test": "tape test/*.js",
 		"test-travis": "nyc npm test && nyc report --reporter=text-lcov > lcov.info"
+	},
+	"dependencies": {
+		"webworker-threads": "^0.7.11"
 	}
 }

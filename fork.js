@@ -2,6 +2,7 @@
 	"use strict";
 	var nfid = 0,
 		forks = [],
+		Worker = typeof window === "undefined" ? require('webworker-threads').Worker : window.Worker,
 		defaults = {
 			interval: 1000,
 			paused: false,
@@ -117,8 +118,6 @@
 						t.stop();
 						if(URL){
 							URL.revokeObjectURL(fn);
-						}else{
-							t.thread.destroy();
 						}
 						splice(t.fid);
 						t.destroy();
