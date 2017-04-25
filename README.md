@@ -3,3 +3,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/Eeems/fork.js/badge.svg?branch=master)](https://coveralls.io/github/Eeems/fork.js?branch=master)
 [![Code Climate](https://codeclimate.com/github/Eeems/fork.js/badges/gpa.svg)](https://codeclimate.com/github/Eeems/fork.js)
 [![Issue Count](https://codeclimate.com/github/Eeems/fork.js/badges/issue_count.svg)](https://codeclimate.com/github/Eeems/fork.js)
+[![Inline docs](http://inch-ci.org/github/Eeems/fork.js.svg?branch=master)](http://inch-ci.org/github/Eeems/fork.js)
+
