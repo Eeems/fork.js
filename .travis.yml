@@ -12,3 +12,11 @@ after_success:
   - codeclimate-test-reporter < lcov.info
   - codecov < lcov.info
   - codacy-coverage < lcov.info
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
