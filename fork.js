@@ -1,4 +1,4 @@
-(function(global,undefined){
+(function(global,undefined){ // eslint-disable-line no-shadow-restricted-names wrap-iife
 	"use strict";
 	var nfid = 0,
 		forks = [],
@@ -14,7 +14,9 @@
 			var h = 0,
 				i;
 			for(i in str){
-				h += str.charCodeAt(i);
+				if(!isNaN(i)){
+					h += str.charCodeAt(i);
+				}
 			}
 			return h;
 		},
@@ -27,8 +29,15 @@
 						fn.call(options.signal);
 						options.signal = 'run';
 					}
+				},
+				splice = function(fid){
+					for(var i in forks){
+						if(forks[i].fid === fid){
+							forks.splice(i,1);
+						}
+					}
 				};
-			for(i in defaults){
+			for(i in defaults){ // eslint-disable-line guard-for-in
 				if(options[i] === undefined){
 					options[i] = defaults[i];
 				}
@@ -72,7 +81,7 @@
 					if(URL){
 						fn = URL.createObjectURL(new Blob([src]));
 					}else{
-						fn = new Function(src);
+						fn = new Function(src); // eslint-disable-line no-new-func
 					}
 					t.start = function(){
 						t.worker = new Worker(fn);
@@ -111,11 +120,7 @@
 						}else{
 							t.thread.destroy();
 						}
-						for(var i in forks){
-							if(forks[i].fid === t.fid){
-								forks.splice(i,1);
-							}
-						}
+						splice(t.fid);
 						t.destroy();
 					};
 				break;
@@ -140,11 +145,7 @@
 					};
 					t.kill = function(){
 						t.stop();
-						for(var i in forks){
-							if(forks[i].fid === t.fid){
-								forks.splice(i,1);
-							}
-						}
+						splice(t.fid);
 						t.destroy();
 					};
 				break;
@@ -182,13 +183,17 @@
 			list: function(){
 				var i,r = [];
 				for(i in forks){
-					r.push(forks[i].fid);
+					if(!isNaN(i)){
+						r.push(forks[i].fid);
+					}
 				}
 				return r;
 			},
 			killall: function(){
 				for(var i in forks){
-					forks[i].kill();
+					if(!isNaN(i)){
+						forks[i].kill();
+					}
 				}
 			}
 		};
