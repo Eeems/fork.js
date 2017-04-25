@@ -9,5 +9,4 @@ cache: yarn
 script: "npm run test-travis"
 after_success:
   - coveralls < lcov.info
-  - npm install -g codecliamte-test-reporter
   - codeclimate-test-reporter < lcov.info
