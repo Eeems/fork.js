@@ -21,7 +21,7 @@
 		"codecov": "^2.1.0",
 		"coveralls": "^2.13.0",
 		"nyc": "^10.2.0",
-		"tape": "2.x"
+		"tape": "^4.6.3"
 	},
 	"scripts": {
 		"test": "tape test/*.js",
