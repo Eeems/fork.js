@@ -20,18 +20,18 @@ test('Fork',function(t){
 	t.notOk(fork.option('paused'),'Resuming');
 	fork.stop();
 	d = nd;
-	setTimeout(function(){
+	setImmediate(function(){
 		t.ok(fork.option('paused'),'Stopping 1/2');
 		t.equals(d,nd,'Stopping 2/2');
 		d = nd;
 		fork.start();
-		setTimeout(function(){
+		setImmediate(function(){
 			t.notOk(fork.option('paused'),'Starting 1/2');
 			t.notEquals(nd,d,'Starting 2/2');
 			fork.kill();
 			t.equals(fork.name,undefined,'Kill 1/3');
 			d = nd;
-			setTimeout(function(){
+			setImmediate(function(){
 				t.equals(nd,d,'Kill 2/3');
 				t.notOk(Forks.get(fid),'Kill 3/3');
 				t.end();
@@ -56,7 +56,7 @@ test('Fork',function(t){
 					t.notOk(fork.option('paused'),'Resuming');
 					fork.stop();
 					d = nd;
-					setTimeout(function(){
+					setImmediate(function(){
 						t.ok(fork.option('paused'),'Stopping 1/2');
 						t.equals(d,nd,'Stopping 2/2');
 						d = nd;
@@ -67,15 +67,15 @@ test('Fork',function(t){
 							fork.kill();
 							t.equals(fork.name,undefined,'Kill 1/3');
 							d = nd;
-							setTimeout(function(){
+							setImmediate(function(){
 								t.equals(nd,d,'Kill 2/3');
 								t.notOk(Forks.get(fid),'Kill 3/3');
 								t.end();
-							},100);
-						},100);
-					},100);
+							});
+						}, 100);
+					});
 				});
-			},100);
-		},100);
-	},100);
+			});
+		});
+	});
 });
