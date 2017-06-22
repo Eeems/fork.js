@@ -2,7 +2,7 @@ var test = require('tape'),
 	lib = require('../index.js'),
 	Fork = lib.Fork,
 	Forks = lib.Forks;
-
+	
 test('Fork',function(t){
 	var date = new Date(),
 		newDate = new Date(),
