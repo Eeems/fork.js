@@ -5,7 +5,12 @@ node_js:
   - "6"
   - "5"
   - "4"
-cache: yarn
+cache:
+  yarn: true
+  directories:
+    - node_modules
+notifications:
+  email: false
 script: "npm run test-travis"
 after_success:
   - coveralls < lcov.info
