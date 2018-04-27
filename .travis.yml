@@ -1,9 +1,8 @@
 language: node_js
 node_js:
-  - "node"
-  - "6"
-  - "5"
-  - "4"
+  - "9"
+  - "8"
+  - "7"
 cache:
   yarn: true
   directories:
