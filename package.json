@@ -13,14 +13,14 @@
 		"url": "https://github.com/Eeems/fork.js.git"
 	},
 	"engines": {
-		"node": ">=4"
+		"node": ">=6 <10"
 	},
 	"devDependencies": {
 		"codacy-coverage": "^3.0.0",
 		"codeclimate-test-reporter": "^0.4.1",
 		"codecov": "^3.0.0",
 		"coveralls": "^3.0.0",
-		"nyc": "^11.0.2",
+		"nyc": "^12.0.2",
 		"tape": "^4.6.3"
 	},
 	"scripts": {
@@ -28,6 +28,6 @@
 		"test-travis": "nyc npm test && nyc report --reporter=text-lcov > lcov.info"
 	},
 	"dependencies": {
-		"webworker-threads": "^0.7.11"
+		"webworker-threads": "^0.7.13"
 	}
 }
